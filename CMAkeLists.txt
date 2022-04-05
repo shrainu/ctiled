@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.2)
+project(bwjam C)
+
+# C standard
+set(CMAKE_C_STANDARD 99)
+
+# Runtime output directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../product)
+
+# Source files
+set(SOURCE_FILES
+
+    src/main.c
+)
+
+# Executable
+add_executable(bwjam ${SOURCE_FILES})
