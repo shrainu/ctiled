@@ -1,0 +1,11 @@
+window:
+  width: 800
+  height: 600
+  vsync: true
+  retina: false   # For retina displays
+  maximize: false # Not applied for windowed mode
+  # WINDOWED            = 0
+  # FULLSCREEN          = 1
+  # WINDOWED FULSCREEN  = 2
+  window-mode: 0
+  monitor: 0 # Monitor to be displayed on

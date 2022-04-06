@@ -1,4 +1,6 @@
 build-debug/
+build/
+.vscode/
 product/bwjam
 build.sh
 run.sh
