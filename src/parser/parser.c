@@ -107,6 +107,7 @@ Map* parser_parse_yaml(const char* path) {
 
                     free(value_str);
                     free(token_str);
+                    free(str);
 
                     return NULL;
                 }
@@ -120,6 +121,7 @@ Map* parser_parse_yaml(const char* path) {
 
                     free(value_str);
                     free(token_str);
+                    free(str);
 
                     return NULL;
                 } else if (*(c + 1) != ':') {
@@ -127,6 +129,7 @@ Map* parser_parse_yaml(const char* path) {
 
                     free(value_str);
                     free(token_str);
+                    free(str);
 
                     return NULL;
                 }
@@ -148,6 +151,7 @@ Map* parser_parse_yaml(const char* path) {
 
                     free(value_str);
                     free(token_str);
+                    free(str);
 
                     return NULL;
                 }
@@ -160,6 +164,9 @@ Map* parser_parse_yaml(const char* path) {
         map_set_key(&map, token_str, value_str);
 
         free(str);
+        free(value_str);
+        free(token_str);
+
         crnt = line + 1;
     }
 

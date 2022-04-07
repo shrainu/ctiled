@@ -36,7 +36,7 @@ static uint32_t monitor_index_ = MONITOR_INDEX;
 static void engine_parse_properties() {
     Map* properties = parser_parse_yaml(config_path_);
     if (!properties) {
-        printf("ERROR: Failed to parse properties from file '%s'", config_path_);
+        printf("ERROR: Failed to parse properties from file '%s'.\n", config_path_);
         return;
     }
 
@@ -66,6 +66,9 @@ static void engine_parse_properties() {
     if (window_mode >= 0 && window_mode <= 2) {
         window_mode_ = window_mode;
     }
+
+    map_free(properties);
+    free(properties);
 }
 
 // Init

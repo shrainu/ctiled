@@ -64,7 +64,7 @@ ValuePair map_get_key_pair(Map* map, const char* key) {
 
 void map_set_key(Map* map, const char* key, const char* value) {
     ValuePair pair = map_get_key_pair(map, key);
-
+    
     if (pair.value) {
         size_t len = strlen(value);
         if (len <= 0) {
