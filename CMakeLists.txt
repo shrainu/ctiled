@@ -7,6 +7,9 @@ set(CMAKE_C_STANDARD 99)
 # Runtime output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../product)
 
+# Set debug
+set(CMAKE_BUILD_TYPE Debug)
+
 # GLFW
 include_directories(/opt/homebrew/Cellar/glfw/3.3.6/include)
 link_directories(/opt/homebrew/Cellar/glfw/3.3.6/lib)
