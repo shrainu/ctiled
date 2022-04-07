@@ -1,9 +1,10 @@
 window:
-  width: 800
-  height: 600
+  width: 1280
+  height: 720
   vsync: true
+  # Only applied for fullscreen, overrides the current resolution
+  maximize: true
   retina: true   # For retina displays
-  maximize: false # Not applied for windowed mode
   # WINDOWED            = 0
   # FULLSCREEN          = 1
   # WINDOWED FULSCREEN  = 2

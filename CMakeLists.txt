@@ -29,6 +29,8 @@ set(SOURCE_FILES
 
     # engine
     src/engine/init.c src/engine/init.h
+    src/engine/shader.c src/engine/shader.h
+    src/engine/window.c src/engine/window.h
 
     # parser
     src/parser/parser.c src/parser/parser.h
