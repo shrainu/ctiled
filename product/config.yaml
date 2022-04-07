@@ -2,7 +2,7 @@ window:
   width: 800
   height: 600
   vsync: true
-  retina: false   # For retina displays
+  retina: true   # For retina displays
   maximize: false # Not applied for windowed mode
   # WINDOWED            = 0
   # FULLSCREEN          = 1
