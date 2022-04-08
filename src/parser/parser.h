@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../util/map.h"
+#include "util/map.h"
 
-#include "common.h"
+#include "util/common.h"
 
 Map* parser_parse_yaml(const char* path);
 

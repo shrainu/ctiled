@@ -10,6 +10,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../product)
 # Set debug
 set(CMAKE_BUILD_TYPE Debug)
 
+# Set debug macro
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG")
+
 # GLFW
 include_directories(/opt/homebrew/Cellar/glfw/3.3.6/include)
 link_directories(/opt/homebrew/Cellar/glfw/3.3.6/lib)
@@ -21,26 +24,39 @@ link_directories(/opt/homebrew/Cellar/glew/2.2.0_1/lib)
 # Common
 include_directories(src/)
 
+# Vendor
+include_directories(src/vendor)
+
+# STB Image files
+set(STB_IMAGE_FILES
+
+    src/vendor/stb_image/stb_image.c
+)
+
 # Source files
 set(SOURCE_FILES
 
     # src
-    src/main.c src/common.h
+    src/main.c
 
     # engine
     src/engine/init.c src/engine/init.h
     src/engine/shader.c src/engine/shader.h
     src/engine/window.c src/engine/window.h
+    src/engine/texture.c src/engine/texture.h
+    src/engine/renderer.c src/engine/renderer.h
 
     # parser
     src/parser/parser.c src/parser/parser.h
 
     # utils
-    src/util/util.h src/util/map.c src/util/map.h
+    src/util/common.h
+    src/util/util.h
+    src/util/map.c src/util/map.h
 )
 
 # Executable
-add_executable(bwjam ${SOURCE_FILES})
+add_executable(bwjam ${SOURCE_FILES} ${STB_IMAGE_FILES})
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)

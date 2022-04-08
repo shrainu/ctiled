@@ -1,6 +1,8 @@
 #include "init.h"
 
 #include "window.h"
+#include "renderer.h"
+
 
 // Init
 bool engine_init() {
@@ -12,7 +14,7 @@ bool engine_init() {
     }
 
     // Initialize the renderer
-    if (false) {
+    if (!engine_init_renderer()) {
         printf("ERROR: Renderer could not initialized!\n");
         return false;
     }
@@ -21,6 +23,9 @@ bool engine_init() {
 }
 
 void engine_terminate() {
+
+    // Terminate the renderer
+    engine_terminate_renderer();
 
     // Terminate the window
     engine_terminate_window();

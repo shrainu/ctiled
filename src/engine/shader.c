@@ -4,7 +4,7 @@
 
 
 // Shared
-static Shader bind_shader_ = 0;
+static Shader bound_shader_ = 0;
 
 // Static
 static uint32_t engine_shader_compile(uint32_t type, const char* shader_source) {
@@ -86,6 +86,62 @@ uint32_t engine_shader_new(const char* vertex_source, const char* fragment_sourc
     return program;
 }
 
-void engine_shader_terminate(Shader shader) {
+void engine_shader_free(Shader shader) {
     glDeleteProgram(shader);
+}
+
+// Shader
+void engine_shader_bind(Shader shader) {
+    glUseProgram(shader);
+    bound_shader_ = shader;
+}
+
+void engine_shader_unbind(Shader shader) {
+    glUseProgram(0);
+    bound_shader_ = 0;
+}
+
+// Get
+Shader engine_bound_shader() {
+    return bound_shader_;
+}
+
+// Uniforms
+void engine_shader_int(Shader shader, const char* location, int32_t value) {
+    int32_t loc = glGetUniformLocation(shader, location);
+
+#ifdef DEBUG
+    if (loc == -1) {
+        printf("WARNING: '%s' is not a valid uniform location.\n", location);
+        return;
+    }
+#endif
+
+    glUniform1i(loc, value);
+}
+
+void engine_shader_float(Shader shader, const char* location, float value) {
+    int32_t loc = glGetUniformLocation(shader, location);
+
+#ifdef DEBUG
+    if (loc == -1) {
+        printf("WARNING: '%s' is not a valid uniform location.\n", location);
+        return;
+    }
+#endif
+
+    glUniform1f(loc, value);
+}
+
+void engine_shader_mat4(Shader shader, const char* location, mat4 mat4) {
+    int32_t loc = glGetUniformLocation(shader, location);
+
+#ifdef DEBUG
+    if (loc == -1) {
+        printf("WARNING: '%s' is not a valid uniform location.\n", location);
+        return;
+    }
+#endif
+
+    glUniformMatrix4fv(loc, 1, GL_FALSE, mat4[0]);
 }

@@ -5,6 +5,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+// CGLM
+#include <cglm/struct.h>
+
 // Standard Library
 #include <stdio.h>
 #include <stdlib.h>

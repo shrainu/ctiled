@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common.h"
+#include "util/common.h"
 
 // Definitions
 #define WINDOW_MODE_WINDOWED            0
@@ -26,3 +26,6 @@ void engine_window_set_vsync(bool vsync);
 void engine_window_set_mode(int32_t window_mode);
 
 void engine_update_gl_viewport();
+
+// Get
+vec2s engine_window_get_size();

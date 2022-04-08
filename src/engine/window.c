@@ -225,3 +225,8 @@ void engine_update_gl_viewport() {
         glViewport(0, window_width_, 0, window_height_);
     }
 }
+
+// Get
+vec2s engine_window_get_size() {
+    return (vec2s) { .x = window_width_, .y = window_height_ };
+}
