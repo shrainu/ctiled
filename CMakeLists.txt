@@ -41,6 +41,7 @@ set(SOURCE_FILES
 
     # engine
     src/engine/init.c src/engine/init.h
+    src/engine/engine.c src/engine/engine.h
     src/engine/shader.c src/engine/shader.h
     src/engine/window.c src/engine/window.h
     src/engine/texture.c src/engine/texture.h

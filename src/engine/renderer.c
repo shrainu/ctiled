@@ -77,7 +77,7 @@ void engine_render_quad(Texture* texture, vec3 position, vec2 size) {
 
     mat4 proj;
     glm_mat4_identity(proj);
-    glm_ortho(0, win_size.x, 0, win_size.y, 0.0, 100.0, proj);
+    glm_ortho(0, win_size.x, 0, win_size.y, -1.0, 100.0, proj);
 
     mat4 model;
     glm_mat4_identity(model);
