@@ -3,6 +3,7 @@
 #include "engine/window.h"
 #include "engine/shader.h"
 #include "engine/texture.h"
+#include "engine/font.h"
 #include "engine/renderer.h"
 
 #include "util/common.h"
@@ -25,6 +26,12 @@ int main() {
 
     Texture* test = engine_texture_new("res/texture/test.jpeg", GL_LINEAR);
     Texture* bunny = engine_texture_new("res/texture/bunny.png", GL_NEAREST);
+
+    Font* font = engine_font_new(
+        "res/font/FiraMono-Regular.ttf", 
+        FONT_DEFAULT_PIXEL_SIZE, 
+        GL_LINEAR
+    );
     
     double fps_timer = 0;
 
@@ -51,17 +58,15 @@ int main() {
 
         // RENDER
         glClearColor(0.12, 0.1, 0.22, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         engine_shader_bind(shader);
 
+        engine_render_quad(bunny, (vec3){225, 75, -1.0}, (vec2){200, 200});
+
         engine_render_quad(test, (vec3){50, 50, -1.0}, (vec2){200, 200});
 
-        engine_render_quad(bunny, (vec3){200, 75, -3.0}, (vec2){200, 200});
-
-        for (int i = 0; i < 1000; ++i) {
-            engine_render_quad(bunny, (vec3){4 + (i % 40 * 20) , 4 + (i / 40 * 20), -4.0}, (vec2){16, 16});
-        }
+        engine_render_text(font, (vec3){50, 550, -1.0}, "Hello, world!", (vec4){255, 0, 0, 255}, 0.5);
 
         engine_shader_unbind(shader);
 
@@ -73,6 +78,8 @@ int main() {
 
     engine_texture_free(test);
     engine_texture_free(bunny);
+
+    engine_font_free(font);
 
     engine_terminate();
 

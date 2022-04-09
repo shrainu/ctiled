@@ -133,6 +133,45 @@ void engine_shader_float(Shader shader, const char* location, float value) {
     glUniform1f(loc, value);
 }
 
+void engine_shader_vec2(Shader shader, const char* location, vec2 vec2) {
+    int32_t loc = glGetUniformLocation(shader, location);
+
+#ifdef DEBUG
+    if (loc == -1) {
+        printf("WARNING: '%s' is not a valid uniform location.\n", location);
+        return;
+    }
+#endif
+
+    glUniform2f(loc, vec2[0], vec2[1]);
+}
+
+void engine_shader_vec3(Shader shader, const char* location, vec3 vec3) {
+    int32_t loc = glGetUniformLocation(shader, location);
+
+#ifdef DEBUG
+    if (loc == -1) {
+        printf("WARNING: '%s' is not a valid uniform location.\n", location);
+        return;
+    }
+#endif
+
+    glUniform3f(loc, vec3[0], vec3[1], vec3[2]);
+}
+
+void engine_shader_vec4(Shader shader, const char* location, vec4 vec4) {
+    int32_t loc = glGetUniformLocation(shader, location);
+
+#ifdef DEBUG
+    if (loc == -1) {
+        printf("WARNING: '%s' is not a valid uniform location.\n", location);
+        return;
+    }
+#endif
+
+    glUniform4f(loc, vec4[0], vec4[1], vec4[2], vec4[3]);
+}
+
 void engine_shader_mat4(Shader shader, const char* location, mat4 mat4) {
     int32_t loc = glGetUniformLocation(shader, location);
 

@@ -24,4 +24,10 @@ void engine_shader_int(Shader shader, const char* location, int32_t value);
 
 void engine_shader_float(Shader shader, const char* location, float value);
 
+void engine_shader_vec2(Shader shader, const char* location, vec2 vec2);
+
+void engine_shader_vec3(Shader shader, const char* location, vec3 vec3);
+
+void engine_shader_vec4(Shader shader, const char* location, vec4 vec4);
+
 void engine_shader_mat4(Shader shader, const char* location, mat4 mat4);

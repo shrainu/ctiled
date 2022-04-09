@@ -21,6 +21,10 @@ link_directories(/opt/homebrew/Cellar/glfw/3.3.6/lib)
 include_directories(/opt/homebrew/Cellar/glew/2.2.0_1/include)
 link_directories(/opt/homebrew/Cellar/glew/2.2.0_1/lib)
 
+# Freetype
+include_directories(/opt/homebrew/Cellar/freetype/2.11.1/include/freetype2)
+link_directories(/opt/homebrew/Cellar/freetype/2.11.1/lib)
+
 # Common
 include_directories(src/)
 
@@ -41,6 +45,7 @@ set(SOURCE_FILES
 
     # engine
     src/engine/init.c src/engine/init.h
+    src/engine/font.c src/engine/font.h
     src/engine/engine.c src/engine/engine.h
     src/engine/shader.c src/engine/shader.h
     src/engine/window.c src/engine/window.h
@@ -65,6 +70,7 @@ find_package(OpenGL REQUIRED)
 # Link libraries
 target_link_libraries(bwjam
     OpenGL::GL
+    freetype.a
     GLEW
     glfw
 )

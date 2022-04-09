@@ -109,9 +109,6 @@ bool engine_init_window() {
         return false;
     }
 
-    // Make window context current
-    glfwMakeContextCurrent(window_);
-
     // Update monitors
     engine_window_update_monitors();
 
@@ -120,6 +117,9 @@ bool engine_init_window() {
 
     // Set the window mode
     engine_window_set_mode(window_mode_);
+
+    // Make window context current
+    glfwMakeContextCurrent(window_);
 
     // Initialize GLEW
     if (glewInit() != 0) { // 0 means success
@@ -220,9 +220,9 @@ void engine_window_set_mode(int32_t window_mode) {
 
 void engine_update_gl_viewport() {
     if (retina_) {
-        glViewport(0, window_width_ * 2, 0, window_height_ * 2);
+        glViewport(0, 0, window_width_ * 2, window_height_ * 2);
     } else {
-        glViewport(0, window_width_, 0, window_height_);
+        glViewport(0, 0, window_width_, window_height_);
     }
 }
 

@@ -43,6 +43,8 @@ static char* read_file(const char* path) {
     buffer = (char*) realloc(buffer, sizeof(char) * buffer_cap + 1);
     buffer[buffer_cap] = '\0';
 
+    fclose(file);
+
     return buffer;
 }
 

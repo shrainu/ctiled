@@ -8,25 +8,14 @@ Texture* engine_texture_new(const char* path, uint32_t filter) {
 
     // Allocate memory for the texture
     Texture* t = (Texture*) malloc(sizeof(Texture));
-
-    // Check if the file exists
-    FILE* fp = NULL;
-	fp = fopen(path, "r");
-
-	if (!(fp)) {
-		printf("ERROR : Image file \"%s\" could not be opened.\n", path);
-		fclose(fp);
-
-        free(t);
-		return NULL;
-	}
-	
-	fclose(fp);
     
+    // Load the imade
     stbi_set_flip_vertically_on_load(true);
-	unsigned char* local_buffer = stbi_load(path, &t->width, &t->height, &t->bpp, 4);
+	uint8_t* local_buffer = stbi_load(path, &t->width, &t->height, &t->bpp, 4);
 
     if (!local_buffer) {
+        printf("ERROR : Image file \"%s\" could not be read.\n", path);
+
         free(t);
         return NULL;
     }
@@ -34,9 +23,9 @@ Texture* engine_texture_new(const char* path, uint32_t filter) {
     glGenTextures(1, &t->id);
     glBindTexture(GL_TEXTURE_2D, t->id);
 
-    uint32_t bitmap_filter = (filter == GL_LINEAR) ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST;
+    uint32_t mipmap_filter = (filter == GL_LINEAR) ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST;
     
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, bitmap_filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmap_filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -45,7 +34,7 @@ Texture* engine_texture_new(const char* path, uint32_t filter) {
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, 0);    
-    stbi_image_free(local_buffer);   
+    stbi_image_free(local_buffer);
     
 	return t;
 }
@@ -53,7 +42,7 @@ Texture* engine_texture_new(const char* path, uint32_t filter) {
 void engine_texture_free(Texture* texture) {
 
     glDeleteTextures(1, &texture->id);
-
+    
     free(texture);
 }
 
