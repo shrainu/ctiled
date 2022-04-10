@@ -23,3 +23,6 @@ typedef struct Font {
 Font* engine_font_new(const char* path, uint32_t pixel_size, uint32_t filter);
 
 void engine_font_free(Font* font);
+
+// Get
+vec2s engine_font_get_text_size(Font* font, const char* text, float scale);

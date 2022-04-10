@@ -126,7 +126,7 @@ void engine_render_text(Font* font, vec3 position, const char* text, vec3 color,
     for (const char* c = text; c < text + strlen(text); ++c) {
 
         // Get the character from font
-        Character* chr = &font->characters[*c];
+        const Character* chr = &font->characters[*c];
 
         float xpos = position[0] + advance + chr->bearing[0] * scale;
         float ypos = position[1] - (chr->size[1] - chr->bearing[1]) * scale;

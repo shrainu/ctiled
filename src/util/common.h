@@ -17,4 +17,9 @@
 #include <stdbool.h>
 #include <inttypes.h>
 
-
+// Colors
+#define COLOR_WHITE     (vec4) {255, 255, 255, 255}
+#define COLOR_BLACK     (vec4) {0, 0, 0, 255}
+#define COLOR_RED       (vec4) {255, 0, 0, 255}
+#define COLOR_GREEN     (vec4) {0, 255, 0, 255}
+#define COLOR_BLUE      (vec4) {0, 0, 255, 255}

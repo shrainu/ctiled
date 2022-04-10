@@ -90,3 +90,35 @@ Font* engine_font_new(const char* path, uint32_t pixel_size, uint32_t filter) {
 void engine_font_free(Font* font) {
     free(font);
 }
+
+// Get
+vec2s engine_font_get_text_size(Font* font, const char* text, float scale) {
+
+    float size_x = 0.0;
+    float size_y = 0.0;
+
+    uint32_t len = strlen(text);
+
+    for (const char* c = text; c < text + len; ++c) {
+
+        // Get the character from font
+        const Character* chr = &font->characters[*c];
+
+        float width  = chr->size[0] * scale;
+        float height = chr->bearing[1] * scale;
+
+        float advance = chr->advance * scale;
+
+        if (height >= size_y) {
+            size_y = height;
+        }
+
+        if (c == text + len - 1) {
+            size_x += (chr->size[0] + chr->bearing[0]) * scale;
+        } else {
+            size_x += advance;
+        }
+    }
+
+    return (vec2s) { size_x, size_y };
+}
