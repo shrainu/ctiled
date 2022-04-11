@@ -2,7 +2,7 @@
 
 // Active scene properties
 static uint32_t next_scene_id_;
-static uint32_t active_scene_id_;
+static uint32_t active_scene_id_ = -1;
 
 // Get
 uint32_t game_scene_get_new_id() {

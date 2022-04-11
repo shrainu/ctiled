@@ -2,13 +2,21 @@
 
 #include "util/common.h"
 
+
+// Typedefs
+typedef int32_t (*scene_func_t) ();
+
+// Defines
+#define SCENE_EXECUTED  0
+#define SCENE_SKIPPED   1
+
 // Shared scene properties and function declerations
 #define SCENE_DECLARE(prefix) \
     void game_scene_##prefix##_set_active(); \
     \
     void game_scene_##prefix##_load(); \
     void game_scene_##prefix##_free(); \
-    void game_scene_##prefix()
+    int32_t game_scene_##prefix()
 
 #define SCENE_DEFINE(prefix) \
     static uint32_t scene_id_; \

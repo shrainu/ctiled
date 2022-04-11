@@ -12,6 +12,10 @@
 #include "util/common.h"
 
 
+// Scene count
+#define SCENE_COUNT 2
+
+
 int main() {
 
     // Initialize the engine
@@ -20,73 +24,36 @@ int main() {
         return -1;
     }
 
+    // Window
     GLFWwindow* window = engine_glfw_window();
 
-    Shader shader = engine_shader_new(
-        "res/shader/base.vert", 
-        "res/shader/base.frag"
-    );
+    // Load scene resources
+    game_scene_menu_load();
+    game_scene_game_load();
 
-    Texture* test = engine_texture_new("res/texture/test.jpeg", GL_LINEAR);
+    // Scene functions
+    scene_func_t scene_functions[SCENE_COUNT] = {
+        &game_scene_menu,
+        &game_scene_game
+    };
 
-    Font* font = engine_font_new(
-        "res/font/FiraMono-Regular.ttf", 
-        FONT_DEFAULT_PIXEL_SIZE, 
-        GL_LINEAR
-    );
-
-    vec2s win_size = engine_window_get_size();
-
-    char fps_buffer[32];
-    double fps_timer = 1.0;
-    vec2s fps_size = engine_font_get_text_size(font, "FPS: 0000", 0.5);
+    // Set the initial scene
+    game_scene_menu_set_active();
 
     while(!glfwWindowShouldClose(window)) {
 
-        engine_calculate_delta_time();
-        engine_calculate_fps();
-
-        // EVENTS
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE)) {
-            glfwSetWindowShouldClose(window, true);
+        // Update current scene
+        for (int32_t i = 0; i < SCENE_COUNT; ++i) {
+            scene_func_t func = scene_functions[i];
+            if ((*func)() == SCENE_EXECUTED) {
+                break;
+            }
         }
-
-        double delta_time = engine_delta_time();
-        uint32_t fps = engine_fps();
-
-        fps_timer += delta_time;
-        if (fps_timer >= 0.5) {
-            sprintf(fps_buffer, "FPS: %u", fps);
-            fps_timer = 0.0;
-        }
-
-        // UPDATE
-
-        // RENDER
-        glClearColor(0.12, 0.1, 0.22, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        engine_shader_bind(shader);
-
-        engine_render_quad(test, (vec3){50, 50, -1.0}, (vec2){200, 200});
-
-        engine_shader_unbind(shader);
-
-        engine_render_text(
-            font, 
-            (vec3){5, win_size.y - 5 - fps_size.y, -1.0}, 
-            fps_buffer, COLOR_WHITE, 0.5
-        );
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
     }
 
-    engine_shader_free(shader);
-
-    engine_texture_free(test);
-
-    engine_font_free(font);
+    // Free scene resources
+    game_scene_menu_load();
+    game_scene_game_load();
 
     engine_terminate();
 
