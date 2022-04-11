@@ -43,6 +43,13 @@ set(SOURCE_FILES
     # src
     src/main.c
 
+    # scene
+    src/game/scene/menu.c src/game/scene/menu.h
+    src/game/scene/game.c src/game/scene/game.h
+
+    # game
+    src/game/scene.c src/game/scene.h
+
     # engine
     src/engine/init.c src/engine/init.h
     src/engine/font.c src/engine/font.h

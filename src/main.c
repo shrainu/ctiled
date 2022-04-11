@@ -1,3 +1,6 @@
+#include "game/scene/game.h"
+#include "game/scene/menu.h"
+
 #include "engine/engine.h"
 #include "engine/init.h"
 #include "engine/window.h"
@@ -37,7 +40,6 @@ int main() {
     char fps_buffer[32];
     double fps_timer = 1.0;
     vec2s fps_size = engine_font_get_text_size(font, "FPS: 0000", 0.5);
-
 
     while(!glfwWindowShouldClose(window)) {
 
