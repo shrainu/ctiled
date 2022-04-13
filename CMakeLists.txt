@@ -65,6 +65,7 @@ set(SOURCE_FILES
     # utils
     src/util/common.h
     src/util/util.h
+    src/util/list.h
     src/util/map.c src/util/map.h
 )
 

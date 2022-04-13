@@ -15,7 +15,7 @@ SCENE_DEFINE(game);
 static Font* default_font_;
 
 // Load
-void game_scene_menu_load() {
+void game_scene_game_load() {
     scene_id_ = game_scene_get_new_id();
 
     default_font_ = engine_font_new(
@@ -26,13 +26,13 @@ void game_scene_menu_load() {
 }
 
 // Free
-void game_scene_menu_free() {
+void game_scene_game_free() {
 
     engine_font_free(default_font_);
 }
 
 // Main
-int32_t game_scene_menu() {
+int32_t game_scene_game() {
 
     // Get the active scene
     uint32_t active_scene = game_scene_get_active_scene();
