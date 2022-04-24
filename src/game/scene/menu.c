@@ -46,7 +46,7 @@ typedef struct Camera {
 } Camera;
 
 static Camera camera_;
-static double camera_speed_ = 80.0f;
+static double camera_speed_ = 200.0f;
 
 // Tile
 typedef struct Tile {
@@ -327,8 +327,8 @@ void place_tiles(const double* cursor_pos, vec2s win_size) {
         remove = true;
     }
 
-    int32_t x = ((int)cursor_pos[0]) / TILE_SIZE;
-    int32_t y = ((int)cursor_pos[1]) / TILE_SIZE;
+    int32_t x = ((int)cursor_pos[0] + camera_.position.x) / TILE_SIZE;
+    int32_t y = ((int)cursor_pos[1] + camera_.position.y) / TILE_SIZE;
 
     if ((x < 0 || x >= INITIAL_LEVEL_SIZE) || (y < 0 || y >= INITIAL_LEVEL_SIZE)) {
         return;
@@ -349,8 +349,8 @@ void render_tiles(Shader shader) {
     }
 
     vec3s render_pos = (vec3s) {
-        camera_.position.x + 0, 
-        camera_.position.y + 0, 
+        0 - camera_.position.x, 
+        0 - camera_.position.y, 
         -1.0
     };
 
@@ -361,7 +361,7 @@ void render_tiles(Shader shader) {
 
     for (int32_t y = 0; y < INITIAL_LEVEL_SIZE; ++y) {
 
-        render_pos.x = 0;
+        render_pos.x = 0 - camera_.position.x;
 
         for (int32_t x = 0; x < INITIAL_LEVEL_SIZE; ++x) {
 
@@ -403,22 +403,27 @@ void render_tiles(Shader shader) {
     }
 }
 
-void update_camera(LIST_TYPE(KeyAction) keys_pressed, double delta_time) {
+void update_camera(double delta_time) {
 
-    for (int32_t i = 0; i < keys_pressed->count; ++i) { 
-        KeyAction current = LIST_GET(keys_pressed, i);
-        
-        if (current.key == GLFW_KEY_A && current.state >= INPUT_KEY_PRESS) {
-            camera_.position.x -= camera_speed_ * delta_time;
-        } else if (current.key == GLFW_KEY_D && current.state >= INPUT_KEY_PRESS) {
-            camera_.position.x += camera_speed_ * delta_time;
-        }
+    GLFWwindow* window = engine_glfw_window();
 
-        if (current.key == GLFW_KEY_S && current.state >= INPUT_KEY_PRESS) {
-            camera_.position.y -= camera_speed_ * delta_time;
-        } else if (current.key == GLFW_KEY_W && current.state >= INPUT_KEY_PRESS) {
-            camera_.position.y += camera_speed_ * delta_time;
-        }
+    if (glfwGetKey(window, GLFW_KEY_A)) {
+        camera_.position.x -= camera_speed_ * delta_time;
+    } else if (glfwGetKey(window, GLFW_KEY_D)) {
+        camera_.position.x += camera_speed_ * delta_time;
+    }
+    
+    if (glfwGetKey(window, GLFW_KEY_S)) {
+        camera_.position.y -= camera_speed_ * delta_time;
+    } else if (glfwGetKey(window, GLFW_KEY_W)) {
+        camera_.position.y += camera_speed_ * delta_time;
+    }
+
+    if (camera_.position.x < 0) {
+        camera_.position.x = 0;
+    }
+    if (camera_.position.y < 0) {
+        camera_.position.y = 0;
     }
 }
 
@@ -614,7 +619,7 @@ int32_t game_scene_menu() {
         // UPDATE
         update_tilepicker(scroll_input, cursor_pos);
 
-        update_camera(keys_pressed, delta_time);
+        update_camera(delta_time);
 
         place_tiles(cursor_pos, win_size);
 

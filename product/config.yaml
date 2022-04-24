@@ -3,7 +3,7 @@ window:
   height: 720
   vsync: true
   # Only applied for fullscreen, overrides the current resolution
-  retina: true   # For retina displays
+  retina: false   # For retina displays
   # WINDOWED            = 0
   # FULLSCREEN          = 1
   # WINDOWED FULSCREEN  = 2
