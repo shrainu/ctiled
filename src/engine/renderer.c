@@ -8,7 +8,11 @@
 static uint32_t vao_, vbo_, ebo_;
 
 // Shaders
+static Shader quad_shader_;
 static Shader text_shader_;
+
+// Textures
+static Texture* quad_texture_;
 
 // Initialization & Termination
 bool engine_init_renderer() {
@@ -51,8 +55,13 @@ bool engine_init_renderer() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    // Load Pre-build
+    // Load pre-build shaders
+    quad_shader_ = engine_shader_new("res/shader/ui.vert", "res/shader/ui.frag");
+
     text_shader_ = engine_shader_new("res/shader/text.vert", "res/shader/text.frag");
+
+    // Load pre-build textures
+    quad_texture_ = engine_texture_new("res/texture/quad.png", GL_NEAREST);
 
     // Enable blending
     glEnable(GL_BLEND);
@@ -69,18 +78,65 @@ void engine_terminate_renderer() {
     glDeleteBuffers(1, &vbo_);
     glDeleteBuffers(1, &ebo_);
 
-    // Delete Pre-build shaders
+    // Delete pre-build shaders
+    engine_shader_free(quad_shader_);
     engine_shader_free(text_shader_);
+
+    // Delete pre-build textures
+    engine_texture_free(quad_texture_);
+}
+
+// Shaders
+Shader engine_renderer_quad_shader() {
+    return quad_shader_;
+}
+
+// Scissor Test
+void engine_renderer_set_scissor_box(int32_t x, int32_t y, int32_t w, int32_t h) {
+    if (engine_window_get_retina()) {
+        glScissor(x * 2, y * 2, w * 2, h * 2);
+    } else {
+        glScissor(x, y, w, h);
+    }
+}
+
+void engine_renderer_set_scissor(bool value) {
+    if (value) {
+        glEnable(GL_SCISSOR_TEST);
+    } else {
+        glDisable(GL_SCISSOR_TEST);
+    }
 }
 
 // Render functions
-void engine_render_quad(Texture* texture, vec3 position, vec2 size) {
+void engine_render_quad(Texture* texture, vec4 source, vec3 position, vec2 size) {
 
     // Get bound shader
     Shader bound = engine_bound_shader();
 
     // Bind the texture
+    if (!texture) {
+        texture = quad_texture_;
+    }
     engine_texture_bind(texture, 0);
+
+    // Source
+    mat4s source_matrix;
+    if (!source) {
+        source_matrix = (mat4s) {
+            0, 0, 0, 0,
+            1, 0, 0, 0,
+            1, 1, 0, 0,
+            0, 1, 0, 0
+        };
+    } else {
+        source_matrix = (mat4s) {
+            source[0]            , source[1]            , 0, 0,
+            source[0] + source[2], source[1]            , 0, 0,
+            source[0] + source[2], source[1] + source[3], 0, 0,
+            source[0]            , source[1] + source[3], 0, 0
+        };
+    }
 
     // Setup matrices
     vec2s win_size = engine_window_get_size();
@@ -100,6 +156,7 @@ void engine_render_quad(Texture* texture, vec3 position, vec2 size) {
     // Send uniforms
     engine_shader_int(bound, "u_texture", 0);
     engine_shader_mat4(bound, "u_mvp", mvp);
+    engine_shader_mat4(bound, "u_source", source_matrix.raw);
 
     // Draw the quad
     glBindVertexArray(vao_);
@@ -122,6 +179,10 @@ void engine_render_text(Font* font, vec3 position, const char* text, vec3 color,
 
     // Bind the text shader
     engine_shader_bind(text_shader_);
+
+    // Snap to pixels
+    position[0] = roundf(position[0]);
+    position[1] = roundf(position[1]);
 
     for (const char* c = text; c < text + strlen(text); ++c) {
 

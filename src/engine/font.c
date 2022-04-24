@@ -46,9 +46,12 @@ Font* engine_font_new(const char* path, uint32_t pixel_size, uint32_t filter) {
         glGenTextures(1, &id);
         glBindTexture(GL_TEXTURE_2D, id);
 
-        uint32_t mipmap_filter = (filter == GL_LINEAR) ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST;
+        // NOTE: Mipmap generation is removed for fonts
+        //uint32_t mipmap_filter = (filter == GL_LINEAR) ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST;
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmap_filter);
+        // NOTE: Mipmap generation is removed for fonts
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmap_filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -63,7 +66,9 @@ Font* engine_font_new(const char* path, uint32_t pixel_size, uint32_t filter) {
             GL_UNSIGNED_BYTE,
             face->glyph->bitmap.buffer
         );
-        glGenerateMipmap(GL_TEXTURE_2D);
+        
+        // NOTE: Mipmap generation is removed for fonts
+        //glGenerateMipmap(GL_TEXTURE_2D);
 
         // Unbind the texture
         glBindTexture(GL_TEXTURE_2D, 0);

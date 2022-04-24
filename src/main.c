@@ -1,4 +1,3 @@
-#include "game/scene/game.h"
 #include "game/scene/menu.h"
 
 #include "engine/engine.h"
@@ -16,7 +15,11 @@
 #define SCENE_COUNT 2
 
 
-int main() {
+int main(int argc, char* argv[]) {
+
+    for (int32_t i = 0; i < argc; ++i) {
+        printf("ARG %d: '%s'\n", i, argv[i]);
+    }
 
     // Initialize the engine
     if (!engine_init()) {
@@ -29,12 +32,10 @@ int main() {
 
     // Load scene resources
     game_scene_menu_load();
-    game_scene_game_load();
 
     // Scene functions
     scene_func_t scene_functions[SCENE_COUNT] = {
         &game_scene_menu,
-        &game_scene_game
     };
 
     // Set the initial scene
@@ -53,7 +54,6 @@ int main() {
 
     // Free scene resources
     game_scene_menu_load();
-    game_scene_game_load();
 
     engine_terminate();
 

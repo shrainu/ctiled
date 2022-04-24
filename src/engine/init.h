@@ -2,7 +2,6 @@
 
 #include "util/common.h"
 
-
 // Init
 bool engine_init();
 

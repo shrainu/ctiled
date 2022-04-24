@@ -1,5 +1,9 @@
 #include "engine.h"
 
+#include "input.h"
+
+// Current dir
+static char* current_dir_; // Get the current dir from argv[0]
 
 // Delta time
 static const double DELTA_TIME_HIGH = 0.1;
@@ -44,4 +48,23 @@ void engine_calculate_fps() {
 
 uint32_t engine_fps() {
     return fps_;
+}
+
+// Events
+void engine_poll_events() {
+
+    // Clear old events
+    engine_input_clear_mouse_button_input();
+
+    engine_input_clear_char_input();
+
+    engine_input_clear_key_input();
+
+    engine_input_clear_mouse_scroll_input();
+
+    // Poll new events
+    glfwPollEvents();
+
+    // Update cursor pos
+    engine_input_update_cursor_pos();
 }

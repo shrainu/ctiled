@@ -56,3 +56,6 @@
         memmove(ptr, ptr + 1, (list->count - (index + 1)) * sizeof(list->array[0]));\
     } \
     list->count--
+
+#define LIST_CLEAR(list) \
+    list->count = 0

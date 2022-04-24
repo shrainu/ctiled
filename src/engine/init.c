@@ -2,6 +2,7 @@
 
 #include "window.h"
 #include "renderer.h"
+#include "input.h"
 
 
 // Init
@@ -19,10 +20,18 @@ bool engine_init() {
         return false;
     }
 
+    // Initialize input systems
+    engine_input_init_char_buffer();
+    engine_input_init_key_buffer();
+
     return true;
 }
 
 void engine_terminate() {
+
+    // Terminate the input system
+    engine_input_free_char_buffer();
+    engine_input_free_key_buffer();
 
     // Terminate the renderer
     engine_terminate_renderer();

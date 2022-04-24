@@ -19,7 +19,7 @@ void engine_window_update_monitors();
 
 void engine_window_set_monitor(uint32_t index);
 
-void engine_windoe_set_maximize(bool maximize);
+void engine_window_set_maximize(bool maximize);
 
 void engine_window_set_vsync(bool vsync);
 
@@ -29,3 +29,5 @@ void engine_update_gl_viewport();
 
 // Get
 vec2s engine_window_get_size();
+
+bool engine_window_get_retina();

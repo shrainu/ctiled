@@ -5,6 +5,8 @@
 #include "util/map.h"
 #include "util/util.h"
 
+#include "input.h"
+
 
 // Engine properties
 static GLFWwindow* window_ = NULL;
@@ -24,7 +26,7 @@ static const int32_t WINDOW_MODE = WINDOW_MODE_WINDOWED;
 static const uint32_t MONITOR_INDEX = 0;
 
 // Window properties
-static const char* title_ = "BWJam Game";
+static const char* title_ = "CTiled";
 static uint32_t window_width_ = SCREEN_WIDTH;
 static uint32_t window_height_ = SCREEN_HEIGHT;
 static bool vsync_ = VSYNC;
@@ -134,6 +136,15 @@ bool engine_init_window() {
     // Set GL Viewport
     engine_update_gl_viewport();
 
+    // Set callbacks
+    glfwSetMouseButtonCallback(window_, engine_input_mouse_button_callback);
+
+    glfwSetCharCallback(window_, engine_input_char_input_callback);
+
+    glfwSetKeyCallback(window_, engine_input_key_input_callback);
+
+    glfwSetScrollCallback(window_, engine_input_scroll_input_callback);
+
     return true;
 }
 
@@ -155,7 +166,7 @@ void engine_window_set_monitor(uint32_t index) {
     monitor_ = available_monitors_[index];
 }
 
-void engine_windoe_set_maximize(bool maximize) {
+void engine_window_set_maximize(bool maximize) {
     maximize_ = maximize;
 }
 
@@ -229,4 +240,8 @@ void engine_update_gl_viewport() {
 // Get
 vec2s engine_window_get_size() {
     return (vec2s) { .x = window_width_, .y = window_height_ };
+}
+
+bool engine_window_get_retina() {
+    return retina_;
 }
