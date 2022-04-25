@@ -10,3 +10,6 @@ window:
   window-mode: 0
   maximize: false
   monitor: 0 # Monitor to be displayed on
+level:
+  level-size: 512
+  tile-size: 16

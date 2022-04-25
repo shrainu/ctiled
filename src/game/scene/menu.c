@@ -14,14 +14,19 @@
 #include "engine/texture.h"
 
 #include "util/list.h"
+#include "util/map.h"
+#include "parser/parser.h"
 
 
 // Add scene definitions
 SCENE_DEFINE(menu);
 
 // Defines
-#define INITIAL_LEVEL_SIZE  512
-#define TILE_SIZE           32
+#define DEFAULT_LEVEL_SIZE  512
+#define DEFAULT_TILE_SIZE   32
+
+static uint32_t level_size_ = 512;
+static uint32_t tile_size_  = 32;
 
 // Static elements
 static UINode* panel;
@@ -101,7 +106,7 @@ void save_map() {
     }
 
     FILE* file = fopen(path, "w");
-    int32_t written = fwrite(level_data_, sizeof(int32_t), (INITIAL_LEVEL_SIZE * INITIAL_LEVEL_SIZE), file);
+    int32_t written = fwrite(level_data_, sizeof(int32_t), (level_size_ * level_size_), file);
 
     printf("INFO: Level has been saved, written %.2f MB of memory.\n", ((double)written * 4) / pow(2, 20));
 }
@@ -118,7 +123,7 @@ void load_map() {
         return;
     }
 
-    uint32_t read = fread(level_data_, sizeof(int32_t), (INITIAL_LEVEL_SIZE * INITIAL_LEVEL_SIZE), file);
+    uint32_t read = fread(level_data_, sizeof(int32_t), (level_size_ * level_size_), file);
 
     printf("INFO: Level has been loaded, read %.2f MB of memory.\n", ((double)read * 4) / pow(2, 20));
 }
@@ -126,7 +131,7 @@ void load_map() {
 void clear_map() {
     printf("INFO: Clearing the level.\n");
 
-    size_t level_size = (INITIAL_LEVEL_SIZE * INITIAL_LEVEL_SIZE);
+    size_t level_size = (level_size_ * level_size_);
     for (int i = 0; i< level_size; ++i) {
         level_data_[i] = -1;
     }
@@ -327,17 +332,17 @@ void place_tiles(const double* cursor_pos, vec2s win_size) {
         remove = true;
     }
 
-    int32_t x = ((int)cursor_pos[0] + camera_.position.x) / TILE_SIZE;
-    int32_t y = ((int)cursor_pos[1] + camera_.position.y) / TILE_SIZE;
+    int32_t x = ((int)cursor_pos[0] + camera_.position.x) / tile_size_;
+    int32_t y = ((int)cursor_pos[1] + camera_.position.y) / tile_size_;
 
-    if ((x < 0 || x >= INITIAL_LEVEL_SIZE) || (y < 0 || y >= INITIAL_LEVEL_SIZE)) {
+    if ((x < 0 || x >= level_size_) || (y < 0 || y >= level_size_)) {
         return;
     }
 
     if (place) {
-        level_data_[(y * INITIAL_LEVEL_SIZE) + x] = tilepicker_->selected_tile;
+        level_data_[(y * level_size_) + x] = tilepicker_->selected_tile;
     } else if (remove) {
-        level_data_[(y * INITIAL_LEVEL_SIZE) + x] = -1;
+        level_data_[(y * level_size_) + x] = -1;
     }
 }
 
@@ -355,19 +360,19 @@ void render_tiles(Shader shader) {
     };
 
     vec2s render_size = (vec2s) {
-        TILE_SIZE,
-        TILE_SIZE
+        tile_size_,
+        tile_size_
     };
 
-    for (int32_t y = 0; y < INITIAL_LEVEL_SIZE; ++y) {
+    for (int32_t y = 0; y < level_size_; ++y) {
 
         render_pos.x = 0 - camera_.position.x;
 
-        for (int32_t x = 0; x < INITIAL_LEVEL_SIZE; ++x) {
+        for (int32_t x = 0; x < level_size_; ++x) {
 
-            int32_t current = level_data_[(y * INITIAL_LEVEL_SIZE) + x];
+            int32_t current = level_data_[(y * level_size_) + x];
             if (current == -1) {
-                render_pos.x += TILE_SIZE;
+                render_pos.x += tile_size_;
 
                 continue;
             }
@@ -396,10 +401,10 @@ void render_tiles(Shader shader) {
 
             engine_shader_unbind(shader);
 
-            render_pos.x += TILE_SIZE;
+            render_pos.x += tile_size_;
         }
 
-        render_pos.y += TILE_SIZE;
+        render_pos.y += tile_size_;
     }
 }
 
@@ -465,8 +470,23 @@ int32_t game_scene_menu() {
     double fps_timer = 3.0;
     vec2s fps_size = engine_font_get_text_size(default_font_, "0000", (engine_window_get_retina()) ? 0.25 : 1.0);
 
+    // Parse level settings
+    Map* config = parser_parse_yaml("config.yaml");
+
+    level_size_ = parser_yaml_parse_int(config, "level-size");
+    if (!level_size_) {
+        level_size_ = DEFAULT_LEVEL_SIZE;
+    }
+    printf("INFO: Level size is set to '%dx%d'.\n", level_size_, level_size_);
+
+    tile_size_  = parser_yaml_parse_int(config, "tile-size");
+    if (!tile_size_) {
+        tile_size_ = DEFAULT_TILE_SIZE;
+    }
+    printf("INFO: Tile size is set to '%dx%d'.\n", tile_size_, tile_size_);
+
     // Level
-    size_t level_size = INITIAL_LEVEL_SIZE * INITIAL_LEVEL_SIZE;
+    size_t level_size = level_size_ * level_size_;
     level_data_ = (int32_t*) malloc(sizeof(int32_t) * level_size);
     for (uint32_t i = 0; i < level_size; ++i) {
         level_data_[i] = -1;
